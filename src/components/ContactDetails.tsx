@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { IContact } from '../utils/Contact_Interfaces';
 import { EmailList } from './EmailList';
+import { Container, Col, Row, Form } from 'react-bootstrap';
 
 interface IContactDetailState {
   contact: IContact;
@@ -88,6 +89,31 @@ export class ContactDetails extends React.Component<
 
     return (
       <>
+        <Container className="pt-5">
+          <Form>
+            <Row></Row>
+            <Row>
+              <Col>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  placeholder="First name"
+                  name="firstName"
+                  onChange={this.handleNameChange}
+                  value={this.state.contact.firstName}
+                />
+              </Col>
+              <Col>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  placeholder="Last name"
+                  name="lastName"
+                  onChange={this.handleNameChange}
+                  value={this.state.contact.lastName}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Container>
         <input
           type="text"
           name="firstName"

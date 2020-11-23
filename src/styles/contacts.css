@@ -3,3 +3,33 @@
 body {
   font-family: 'Lato', sans-serif;
 }
+.contact-list,
+.contact-list .list-group-item {
+  background: #f8faff;
+  cursor: pointer;
+  /* .nav-pills > li.active > a{
+    color: red; */
+}
+
+.round-button {
+  background-color: #579aff;
+  display: block;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.rectangle {
+  position: relative;
+  width: 4px;
+  height: 36px;
+  background: linear-gradient(0deg, #ffffff, #ffffff),
+    linear-gradient(0deg, #ffffff, #ffffff), #ffffff;
+  top: 7px;
+  left: 23px;
+}
+.rectangle.vertical {
+  top: 0;
+  transform: rotate(90deg);
+}
