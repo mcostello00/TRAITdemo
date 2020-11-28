@@ -22,18 +22,10 @@ export const ContactList: React.FunctionComponent<IContactListProps> = (
         <Col>
           <h3>Contacts</h3>
         </Col>
-        <Col>
-          <div
-            style={{
-              height: '32px',
-              width: '32px',
-              borderRadius: '50%',
-              cursor: 'pointer',
-            }}
-            onClick={(e) => props.handleAddClick()}
-          >
+        <Col className="pt-1">
+          <a className="icon-button" onClick={(e) => props.handleAddClick()}>
             <FontAwesomeIcon icon={faPlusCircle} color="#579AFF" size="2x" />
-          </div>
+          </a>
         </Col>
       </Row>
 
@@ -44,22 +36,10 @@ export const ContactList: React.FunctionComponent<IContactListProps> = (
             key={contact.id}
             onClick={(e) => props.handleEditClick(contact.id)}
           >
-            <a onClick={(e) => props.handleEditClick(contact.id)}>
-              {contact.firstName} {contact.lastName}: {contact.id}
-            </a>
+            {contact.firstName} {contact.lastName}: {contact.id}
           </ListGroup.Item>
         ))}
       </ListGroup>
-
-      {/* <ul style={{ listStyle: 'none' }}>
-        {props.contacts.map((contact) => (
-          <li key={contact.id}>
-            <a onClick={(e) => props.handleEditClick(contact.id)}>
-              {contact.firstName} {contact.lastName}: {contact.id}
-            </a>
-          </li>
-        ))}
-      </ul> */}
     </>
   );
 };

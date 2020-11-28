@@ -10,26 +10,57 @@ body {
   /* .nav-pills > li.active > a{
     color: red; */
 }
+.details-form {
+  min-height: 600px;
+  padding-bottom: 20px;
+}
 
-.round-button {
-  background-color: #579aff;
-  display: block;
-  height: 50px;
-  width: 50px;
+.icon-button {
+  cursor: pointer;
   border-radius: 50%;
-  position: relative;
+  height: 32px;
+  width: 32px;
 }
 
-.rectangle {
-  position: relative;
-  width: 4px;
-  height: 36px;
-  background: linear-gradient(0deg, #ffffff, #ffffff),
-    linear-gradient(0deg, #ffffff, #ffffff), #ffffff;
-  top: 7px;
-  left: 23px;
+.icon-button.small {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
 }
-.rectangle.vertical {
-  top: 0;
-  transform: rotate(90deg);
+
+.hover-button {
+  display: none;
+}
+.hover-button:hover {
+  display: block;
+}
+
+.hover-button-trigger:hover ~ .hover-button {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  button.full-width {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+  .details-form {
+    min-height: 0;
+  }
+  .hover-button {
+    display: block;
+  }
+  button.full-width {
+    width: 100%;
+  }
+}
+
+form-control.is-invalid,
+.was-validated .form-control:invalid {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }

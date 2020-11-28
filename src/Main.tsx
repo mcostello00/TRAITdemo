@@ -58,6 +58,11 @@ export class Main extends React.Component<IMainProps, IMainState> {
     });
   };
 
+  private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Form submitted!!!');
+  };
+
   public handleSaveClick = (contact: IContact) => {
     if (this.state.isEditing) {
       updateContact(contact);
@@ -111,6 +116,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
               <ContactDetails
                 key={selectedContact.id}
                 contact={selectedContact}
+                handleSubmit={this.handleSubmit}
                 handleSaveClick={this.handleSaveClick}
                 handleCancelClick={this.handleCancelClick}
                 handleDeleteClick={this.handleDeleteClick}
