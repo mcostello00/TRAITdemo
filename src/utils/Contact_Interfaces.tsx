@@ -5,12 +5,12 @@ export interface IContact {
   emails: string[];
 }
 
-export interface IContactResponse {
-  contacts: IContact[];
-  page: number;
-  itemsPerPage: number;
-  totalItems: number;
-}
+// export interface IContactResponse {
+//   contacts: IContact[];
+//   page: number;
+//   itemsPerPage: number;
+//   totalItems: number;
+// }
 
 export interface IContactInfo {
   contacts: IContact[];

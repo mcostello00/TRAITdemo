@@ -9,7 +9,7 @@ import {
 import { IContact, IContactInfo } from './utils/Contact_Interfaces';
 import { ContactList } from './components/ContactList';
 import { ContactDetails } from './components/ContactDetails';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Alert, Spinner } from 'react-bootstrap';
 
 export interface IMainProps {
   app: App;
@@ -19,7 +19,12 @@ export interface IMainProps {
 
 interface IMainState {
   response: IContactInfo;
-  selectedContact: IContact;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emails: string[];
+  isLoading: boolean;
   isAdding: boolean;
   isEditing: boolean;
   isRetrievalError: boolean;
@@ -29,7 +34,12 @@ interface IMainState {
 export class Main extends React.Component<IMainProps, IMainState> {
   state = {
     response: { contacts: [] } as IContactInfo,
-    selectedContact: null as IContact,
+    id: null as number,
+    firstName: '',
+    lastName: '',
+    email: '',
+    emails: [] as string[],
+    isLoading: false,
     isAdding: false,
     isEditing: false,
     isRetrievalError: false,
@@ -40,90 +50,206 @@ export class Main extends React.Component<IMainProps, IMainState> {
     return this.state.response.contacts.find((contact) => contact.id === id);
   }
 
-  public handleEditClick = (id: number) => {
-    console.log('handleEditClick');
+  private resetState() {
     this.setState({
-      selectedContact: this.findContact(id),
+      isAdding: false,
+      isEditing: false,
+      isLoading: false,
+      isUpdateError: false,
+      id: null,
+      firstName: '',
+      lastName: '',
+      email: '',
+      emails: [],
+    });
+  }
+
+  public handleEditClick = (id: number) => {
+    let { firstName, lastName, emails } = this.findContact(id);
+
+    this.setState({
+      id,
+      firstName,
+      lastName,
+      emails,
       isAdding: false,
       isEditing: true,
     });
   };
 
   public handleAddClick = () => {
-    console.log('handleAddClick');
     this.setState({
       isAdding: true,
       isEditing: false,
-      selectedContact: null,
+      id: null,
+      firstName: '',
+      lastName: '',
+      email: '',
+      emails: [],
     });
   };
 
+  private isValidEmail(email: string) {
+    return email === '' || true;
+  }
+
+  private consolidateEmails(): string[] {
+    let { emails, email } = this.state;
+
+    if (email != '') {
+      return emails.concat(email);
+    } else {
+      return emails;
+    }
+  }
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted!!!');
-  };
+    let {
+      id,
+      firstName,
+      lastName,
+      email,
+      emails,
+      isAdding,
+      isEditing,
+    } = this.state;
 
-  public handleSaveClick = (contact: IContact) => {
-    if (this.state.isEditing) {
-      updateContact(contact);
-    } else if (this.state.isAdding) {
-      createContact({
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        emails: contact.emails,
-      }).catch((error) => this.setState({ isUpdateError: true }));
+    if (firstName && lastName && this.isValidEmail(email)) {
+      this.setState({ isLoading: true });
+
+      let contact: IContact = {
+        firstName,
+        lastName,
+        emails: this.consolidateEmails(),
+      };
+
+      if (isEditing) {
+        contact.id = id;
+
+        updateContact(contact)
+          .then(() => this.resetState())
+          .then(() => this.retreiveContactInfo())
+          .catch((error) => this.setState({ isUpdateError: true }))
+          .finally(() => this.setState({ isLoading: false }));
+      }
+
+      if (isAdding) {
+        createContact(contact)
+          .then(() => this.resetState())
+          .then(() => this.retreiveContactInfo())
+          .catch((error) => this.setState({ isUpdateError: true }))
+          .finally(() => this.setState({ isLoading: false }));
+      }
     }
   };
 
   public handleCancelClick = () => {
-    this.setState({ selectedContact: null, isEditing: false, isAdding: false });
+    this.resetState();
   };
 
-  public handleDeleteClick = (contact: IContact) => {
-    console.log('****', contact, '****');
-    deleteContact(contact).catch((error) =>
-      console.log('Delete Error: ', error),
-    );
-    this.setState({ selectedContact: null, isEditing: false, isAdding: false });
+  public handleDeleteClick = (id: number) => {
+    this.setState({ isLoading: true });
+
+    deleteContact(id)
+      .then(() => {
+        this.resetState();
+        return this.retreiveContactInfo();
+      })
+      .catch((error) => this.setState({ isUpdateError: true }))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
   };
 
-  public async componentDidMount() {
+  public handleDeleteEmailClick = (email: string) => {
+    this.setState({
+      emails: this.state.emails.filter(
+        (emailAddress) => email !== emailAddress,
+      ),
+    });
+  };
+
+  public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.name === 'firstName') {
+      this.setState({ firstName: event.target.value });
+    } else if (event.target.name === 'lastName') {
+      this.setState({ lastName: event.target.value });
+    } else if (event.target.name === 'email') {
+      this.setState({ email: event.target.value });
+    }
+  };
+
+  // public handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log('handleEmailChange');
+  //   this.setState({ email: event.target.value });
+  // };
+
+  private async retreiveContactInfo() {
+    this.setState({ isLoading: true });
+
     getContactInfo()
       .then((response) => this.setState({ response }))
-      .catch((error) => this.setState({ isRetrievalError: true }));
+      .catch((error) => this.setState({ isRetrievalError: true }))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
+
+  public componentDidMount() {
+    this.retreiveContactInfo();
   }
 
   public render(): JSX.Element {
     let { contacts } = this.state.response;
-    let { selectedContact, isAdding, isEditing } = this.state;
-
-    if (isAdding) {
-      selectedContact = { id: -1, firstName: '', lastName: '', emails: [] };
-    }
+    let { id, firstName, lastName, emails, email } = this.state;
 
     return (
       <Container>
-        <Row>
-          <Col xs={12} md={4}>
-            <ContactList
-              contacts={contacts}
-              handleEditClick={this.handleEditClick}
-              handleAddClick={this.handleAddClick}
-            />
-          </Col>
-          <Col xs={12} md={8}>
-            {(this.state.isAdding || this.state.isEditing) && (
-              <ContactDetails
-                key={selectedContact.id}
-                contact={selectedContact}
-                handleSubmit={this.handleSubmit}
-                handleSaveClick={this.handleSaveClick}
-                handleCancelClick={this.handleCancelClick}
-                handleDeleteClick={this.handleDeleteClick}
+        {this.state.isLoading ? (
+          <Row>
+            <Col>
+              <Alert variant={'info'}>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <span className="ml-2">Loading...</span>
+              </Alert>
+            </Col>
+          </Row>
+        ) : (
+          <Row>
+            <Col xs={12} md={4}>
+              <ContactList
+                activeId={this.state.id}
+                contacts={contacts}
+                handleEditClick={this.handleEditClick}
+                handleAddClick={this.handleAddClick}
               />
-            )}
-          </Col>
-        </Row>
+            </Col>
+            <Col xs={12} md={8}>
+              {(this.state.isAdding || this.state.isEditing) && (
+                <ContactDetails
+                  key={this.state.id}
+                  id={id}
+                  firstName={firstName}
+                  lastName={lastName}
+                  email={email}
+                  emails={emails}
+                  handleChange={this.handleChange}
+                  handleSubmit={this.handleSubmit}
+                  handleDeleteEmailClick={this.handleDeleteEmailClick}
+                  //handleSaveClick={this.handleSaveClick}
+                  handleCancelClick={this.handleCancelClick}
+                  handleDeleteClick={this.handleDeleteClick}
+                />
+              )}
+            </Col>
+          </Row>
+        )}
       </Container>
     );
   }

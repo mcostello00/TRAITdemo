@@ -1,0 +1,36 @@
+return (
+      <Container>
+        {this.state.isLoading && <Alert>This is an alert</Alert>}
+        {!this.state.isLoading && (
+          <Row>
+            <Col xs={12} md={4}>
+              <ContactList
+                activeId={this.state.id}
+                contacts={contacts}
+                handleEditClick={this.handleEditClick}
+                handleAddClick={this.handleAddClick}
+              />
+            </Col>
+            <Col xs={12} md={8}>
+              {(this.state.isAdding || this.state.isEditing) && (
+                <ContactDetails
+                  key={this.state.id}
+                  id={id}
+                  firstName={firstName}
+                  lastName={lastName}
+                  email={email}
+                  emails={emails}
+                  handleChange={this.handleChange}
+                  handleSubmit={this.handleSubmit}
+                  handleDeleteEmailClick={this.handleDeleteEmailClick}
+                  //handleSaveClick={this.handleSaveClick}
+                  handleCancelClick={this.handleCancelClick}
+                  handleDeleteClick={this.handleDeleteClick}
+                />
+              )}
+            </Col>
+          </Row>
+        )}
+      </Container>
+    );
+  }

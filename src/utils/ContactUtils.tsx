@@ -26,9 +26,9 @@ export async function updateContact(contact: IContact) {
   );
 }
 
-export async function deleteContact(contact: IContact) {
+export async function deleteContact(id: number) {
   const response = await http_delete<IContactInfo>(
-    `${endpoint}/contacts/${contact.id}`,
-    contact,
+    `${endpoint}/contacts/${id}`,
+    { id },
   );
 }

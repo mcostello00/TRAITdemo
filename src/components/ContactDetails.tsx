@@ -17,88 +17,28 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { updateContact } from '../utils/ContactUtils';
 
 interface IContactDetailState {
-  contact: IContact;
-  newEmail: string;
   wasValidated: boolean;
 }
 
 interface IContactDetailProps {
-  contact: IContact;
-  handleSaveClick: (contact: IContact) => void;
-  handleDeleteClick: (contact: IContact) => void;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  emails: string[];
+  //handleSaveClick: (contact: IContact) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDeleteEmailClick: (email: string) => void;
+  handleDeleteClick: (id: number) => void;
   handleCancelClick: () => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-
-const getInitialContactState = (
-  props: IContactDetailProps,
-): IContactDetailState => {
-  if (!props.contact)
-    return {
-      contact: {
-        id: -1,
-        firstName: '',
-        lastName: '',
-        emails: [] as string[],
-      },
-      newEmail: '',
-      wasValidated: false,
-    };
-  else {
-    return { contact: props.contact, newEmail: '', wasValidated: false };
-  }
-};
 
 export class ContactDetails extends React.Component<
   IContactDetailProps,
   IContactDetailState
 > {
-  public handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name === 'firstName') {
-      this.setState({
-        contact: { ...this.state.contact, firstName: event.target.value },
-      });
-    } else if (event.target.name === 'lastName') {
-      this.setState({
-        contact: { ...this.state.contact, lastName: event.target.value },
-      });
-    }
-  };
-
-  //public handleAddEmailClick = (event: React.MouseEvent<HTMLElement>) => {
-  //makeMove(ownMark, (event.target as any).index)
-  // }
-
-  // public handleDeleteEmailClick = (event: React.MouseEvent<HTMLElement>) => {
-  //makeMove(ownMark, (event.target as any).index)
-  // }
-
-  // public handleAddEmailClick = (email: string) => {
-  //   this.setState({
-  //     contact: {
-  //       ...this.state.contact,
-  //       emails: [...this.state.contact.emails, email],
-  //     },
-  //   });
-  // };
-
-  public handleNewEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    console.log('handleNewEmailChange');
-    this.setState({ newEmail: event.target.value });
-  };
-
-  public handleDeleteEmailClick = (email: string) => {
-    this.setState({
-      contact: {
-        ...this.state.contact,
-        emails: this.state.contact.emails.filter(
-          (emailAddress) => email !== emailAddress,
-        ),
-      },
-    });
-  };
+  state = { wasValidated: false };
 
   onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -113,22 +53,10 @@ export class ContactDetails extends React.Component<
     }
   }
 
-  save(event: React.MouseEvent<HTMLElement>) {
-    let newContact = this.state.contact;
-
-    if (this.state.newEmail != '') {
-      let updateEmails = [...this.state.contact.emails, this.state.newEmail];
-      newContact = { ...this.state.contact, emails: updateEmails };
-    }
-
-    this.props.handleSaveClick(newContact);
-  }
-
-  state = getInitialContactState(this.props);
-
   public render(): JSX.Element {
-    let { contact } = this.props;
+    let { firstName, lastName, emails } = this.props;
 
+    console.log(this.props.emails);
     console.log('this.state.wasValidated ' + this.state.wasValidated);
     return (
       <>
@@ -136,7 +64,6 @@ export class ContactDetails extends React.Component<
           <Form
             noValidate
             onSubmit={(e) => this.onSubmit(e)}
-            //onSubmit={(e) => console.log('submit')}
             className={
               (this.state.wasValidated ? 'was-validated ' : '') +
               'details-form container-fluid d-flex flex-column h-100'
@@ -151,8 +78,8 @@ export class ContactDetails extends React.Component<
                   autoComplete="off"
                   placeholder="First name"
                   name="firstName"
-                  onChange={this.handleNameChange}
-                  value={this.state.contact.firstName}
+                  onChange={this.props.handleChange}
+                  value={this.props.firstName}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please provide a first name.
@@ -165,8 +92,8 @@ export class ContactDetails extends React.Component<
                   type="text"
                   placeholder="Last name"
                   name="lastName"
-                  onChange={this.handleNameChange}
-                  value={this.state.contact.lastName}
+                  onChange={this.props.handleChange}
+                  value={this.props.lastName}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please provide a last name.
@@ -176,21 +103,19 @@ export class ContactDetails extends React.Component<
 
             <EmailList
               //handleAddClick={this.handleAddEmailClick}
-              newEmail={this.state.newEmail}
-              handleDeleteClick={this.handleDeleteEmailClick}
-              handleNewEmailChange={this.handleNewEmailChange}
-              emailAddresses={this.state.contact.emails}
+              email={this.props.email}
+              handleDeleteClick={this.props.handleDeleteEmailClick}
+              handleNewEmailChange={this.props.handleChange}
+              emailAddresses={this.props.emails}
             />
             <Form.Row className="mt-auto mb-3">
               <Col xs={12} md={2}>
                 <Button
+                  disabled={this.props.id === null}
                   formNoValidate
-                  type="submit"
                   className="button full-width mb-1"
                   style={{ backgroundColor: '#FF5757' }}
-                  // onClick={(e) =>
-                  //   this.props.handleDeleteClick(this.state.contact)
-                  // }
+                  onClick={(e) => this.props.handleDeleteClick(this.props.id)}
                 >
                   Delete
                 </Button>
@@ -198,11 +123,10 @@ export class ContactDetails extends React.Component<
               <Col xs={12} md={5}></Col>
               <Col xs={12} md={3}>
                 <Button
-                  type="submit"
+                  formNoValidate
                   className="button full-width mb-1"
-                  variant="outline-dark"
-                  style={{ backgroundColor: '#F9FBFF' }}
-                  //onClick={this.props.handleCancelClick}
+                  style={{ backgroundColor: '#F9FBFF', color: 'black' }}
+                  onClick={this.props.handleCancelClick}
                 >
                   Cancel
                 </Button>

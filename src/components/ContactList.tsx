@@ -8,6 +8,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 export interface IContactListProps {
   contacts: IContact[];
+  activeId: number;
   //handleClick: (event: React.MouseEvent<HTMLElement>) => void;
   handleEditClick: (i: number) => void;
   handleAddClick: () => void;
@@ -19,7 +20,7 @@ export const ContactList: React.FunctionComponent<IContactListProps> = (
   return (
     <>
       <Row>
-        <Col>
+        <Col lg={5} md={6} sm={3} xs={3}>
           <h3>Contacts</h3>
         </Col>
         <Col className="pt-1">
@@ -32,11 +33,12 @@ export const ContactList: React.FunctionComponent<IContactListProps> = (
       <ListGroup as="ul" className="contact-list">
         {props.contacts.map((contact) => (
           <ListGroup.Item
+            active={contact.id === props.activeId}
             as="li"
             key={contact.id}
             onClick={(e) => props.handleEditClick(contact.id)}
           >
-            {contact.firstName} {contact.lastName}: {contact.id}
+            {contact.firstName} {contact.lastName}
           </ListGroup.Item>
         ))}
       </ListGroup>

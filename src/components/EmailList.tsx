@@ -11,11 +11,10 @@ interface IEmailListProps {
   //handleAddClick: (email: string) => void;
   handleDeleteClick: (email: string) => void;
   handleNewEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  newEmail: string;
+  email: string;
 }
 
 interface IEmailListState {
-  newEmail: string;
   isAdding: boolean;
 }
 
@@ -24,7 +23,6 @@ export class EmailList extends React.Component<
   IEmailListState
 > {
   state = {
-    newEmail: '',
     isAdding: false,
   };
 
@@ -32,18 +30,18 @@ export class EmailList extends React.Component<
     this.setState({ isAdding: true });
   };
 
-  public handleNewEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    this.setState({ newEmail: event.target.value });
-  };
+  // public handleNewEmailChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  // ) => {
+  //   this.setState({ newEmail: event.target.value });
+  // };
   //export const EmailList: React.FunctionComponent<IEmailListProps, IEmailListState> = (props) => {
   public render(): JSX.Element {
     console.log(this);
     return (
       <>
         <Form.Row>
-          <Form.Group as={Col}>
+          <Form.Group as={Col} className="col-md-5">
             <Form.Label sm="2">Emails</Form.Label>
 
             {this.props.emailAddresses.map((email) => (
@@ -57,6 +55,7 @@ export class EmailList extends React.Component<
                 />
                 <a
                   className="icon-button small hover-button"
+                  title="Delete Email"
                   key={`${email}button`}
                   onClick={(e) => this.props.handleDeleteClick(email)}
                 >
@@ -64,9 +63,6 @@ export class EmailList extends React.Component<
                 </a>
               </InputGroup>
             ))}
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid email.
-            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -74,6 +70,7 @@ export class EmailList extends React.Component<
             <InputGroup.Prepend className="pb-1">
               <a
                 className="icon-button small mr-1"
+                title="Add Email"
                 onClick={this.handleAddClick}
               >
                 <FontAwesomeIcon
@@ -91,10 +88,13 @@ export class EmailList extends React.Component<
             <Form.Control
               type="email"
               placeholder="Email"
-              name="newEmail"
+              name="email"
               onChange={this.props.handleNewEmailChange}
-              value={this.props.newEmail}
+              value={this.props.email}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid email.
+            </Form.Control.Feedback>
           </Form.Row>
         )}
       </>
