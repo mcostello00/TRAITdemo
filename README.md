@@ -1,83 +1,71 @@
-# React TypeScript Webpack Starter
+# AVB Marketing Contact Demo
 
-A very simple starter project for using React, TypeScript and Webpack, along with Jest for writing tests.
+## Requirements
 
-## Getting Started
+Sample Application for interacting with AVB API.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+### Node
 
+[Node](http://nodejs.org/) is really easy to install & now include [NPM](https://npmjs.org/).
+You should be able to run the following command after the installation procedure
+below.
 
-### Installing
+    $ node --version
+    v0.10.24
 
-**Note:** Webpack is installed locally as recommended by the official [Webpack documentation](https://webpack.js.org/guides/installation/). 
-It makes it easy to upgrade projects individually when breaking changes are introduced. 
+    $ npm --version
+    1.3.21
 
-Once you have forked and cloned off the project.
-Install the project dependencies by running
+#### Node installation on OS X
 
-```
-yarn
-```
-Or using NPM
-```
-npm install
-```
+You will need to use a Terminal. On OS X, you can find the default terminal in
+`/Applications/Utilities/Terminal.app`.
 
-#### Development
-We will utilise `webpack-dev-server` to run a dev server. It serves webpack projects and updates the browser automatically with any changes we make in our code.
+Please install [Homebrew](http://brew.sh/) if it's not already done with the following command.
 
-You can run `webpack-dev-server --mode development` or alternatively utilise our npm scripts inside our `package.json` 
+    $ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-```
-yarn dev
-```
-Or using NPM
-```
-npm run dev
-```
+If everything when fine, you should run
 
-#### Tests
-You can create tests in the `src/__tests__` folder. Tests are handled by [Jest](https://jestjs.io/)
+    brew install node
 
-To run tests:
+#### Node installation on Linux
 
-```
-yarn test
-```
-Or using NPM
-```
-npm run test
-```
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:chris-lea/node.js
+    sudo apt-get update
+    sudo apt-get install nodejs
 
-#### Production
-You can run `webpack --mode production` or the below using our npm scripts.
-```
-yarn build
-```
-Or using NPM
-```
-npm run build
-```
+#### Node installation on Windows
 
+Just go on [official Node.js website](http://nodejs.org/) & grab the installer.
+Also, be sure to have `git` available in your PATH, `npm` might need it.
 
+---
 
-## Built With
+## Install
 
-* [React](https://reactjs.org/) - JavaScript library for building user interfaces.
-* [TypeScript](https://www.typescriptlang.org) - TypeScript is a superset of JavaScript that compiles to clean JavaScript.
-* [Webpack](https://webpack.js.org/) - App bundler for JavaScript.
-* [Jest](https://jestjs.io/) - JavaScript Testing Framework.
+    $ git clone https://github.com/mcostello00/AVBMarketingDemo.git
+    $ cd PROJECT
+    $ npm install
 
-#### Required for Webpack and TypeScript
-* [Awesome Typescript Loader](https://github.com/s-panferov/awesome-typescript-loader) - Helps Webpack compile our TypeScript code using `tsconfig.json`
+## Start & watch
 
-#### Webpack Plugins
-* [HTML Webpack Plugin](https://github.com/jantimon/html-webpack-plugin) - Simplifies creation of HTML files to serve our webpack bundles.
+    $ npm run dev
 
-## License
+## Simple build for production
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+    $ npm run build
 
-## Acknowledgments
+---
 
-* [Saurabh Pati](https://hackernoon.com/react-with-typescript-and-webpack-654f93f34db6) - for his detailed tutorial on setting up React & TypeScript with Webpack
+## Languages & tools
+
+### JavaScript
+
+- [ESLint](https://eslint.org/) is used for linting
+- [Prettier](https://prettier.io/docs/en/index.html) is used to check coding conventions.
+- [Webpack](https://webpack.js.org/) is used to bundle assets
+- [React](http://facebook.github.io/react) is used for UI.
+- [Typescript](https://www.typescriptlang.org/) is used to add type system to Javascript
+- [Jest](https://jestjs.io/) is used for testing
