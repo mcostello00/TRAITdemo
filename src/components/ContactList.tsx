@@ -9,7 +9,6 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 export interface IContactListProps {
   contacts: IContact[];
   activeId: number;
-  //handleClick: (event: React.MouseEvent<HTMLElement>) => void;
   handleEditClick: (i: number) => void;
   handleAddClick: () => void;
 }

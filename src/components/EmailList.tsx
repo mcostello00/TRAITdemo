@@ -6,9 +6,7 @@ import { faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface IEmailListProps {
   emailAddresses: string[];
-  //   handleAddClick:  React.MouseEventHandler<HTMLButtonElement>;
-  //   handleDeleteClick: React.MouseEventHandler<HTMLButtonElement>;
-  //handleAddClick: (email: string) => void;
+
   handleDeleteClick: (email: string) => void;
   handleNewEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   email: string;
@@ -30,14 +28,7 @@ export class EmailList extends React.Component<
     this.setState({ isAdding: true });
   };
 
-  // public handleNewEmailChange = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  // ) => {
-  //   this.setState({ newEmail: event.target.value });
-  // };
-  //export const EmailList: React.FunctionComponent<IEmailListProps, IEmailListState> = (props) => {
   public render(): JSX.Element {
-    console.log(this);
     return (
       <>
         <Form.Row>

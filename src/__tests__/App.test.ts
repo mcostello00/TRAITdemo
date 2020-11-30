@@ -1,3 +1,13 @@
-import { App } from '../App';
+import { isValidEmail } from '../Main';
 
-test('adds two numbers returning the correct value', () => {});
+test('Empty email is valid', () => {
+  expect(isValidEmail('')).toBe(true);
+});
+
+test('Email with @', () => {
+  expect(isValidEmail('emailaddress@email.com')).toBe(true);
+});
+
+test('Email without @', () => {
+  expect(isValidEmail('emailaddressemail.com')).toBe(false);
+});

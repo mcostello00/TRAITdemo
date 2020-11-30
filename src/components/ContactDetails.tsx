@@ -11,6 +11,7 @@ import {
   Button,
   InputGroup,
   FormLabel,
+  Fade,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
@@ -43,10 +44,7 @@ export class ContactDetails extends React.Component<
   onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log(e.currentTarget.reportValidity());
-
     if (!e.currentTarget.reportValidity()) {
-      console.log('setting wasValidated to true');
       this.setState({ wasValidated: true });
     } else {
       this.props.handleSubmit(e);
@@ -56,8 +54,6 @@ export class ContactDetails extends React.Component<
   public render(): JSX.Element {
     let { firstName, lastName, emails } = this.props;
 
-    console.log(this.props.emails);
-    console.log('this.state.wasValidated ' + this.state.wasValidated);
     return (
       <>
         <Container className="pt-5">
@@ -72,6 +68,7 @@ export class ContactDetails extends React.Component<
             <Form.Row>
               <Form.Group as={Col} controlId="first-name">
                 <Form.Label>First Name</Form.Label>
+
                 <Form.Control
                   required
                   type="text"
@@ -81,6 +78,7 @@ export class ContactDetails extends React.Component<
                   onChange={this.props.handleChange}
                   value={this.props.firstName}
                 />
+
                 <Form.Control.Feedback type="invalid">
                   Please provide a first name.
                 </Form.Control.Feedback>

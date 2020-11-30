@@ -1,7 +1,7 @@
 {
   "name": "react-typescript-webpack",
   "version": "1.0.0",
-  "description": "A very simple starter project for using React,TypeScript and Webpack.",
+  "description": "A demo for AVB",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
@@ -13,7 +13,7 @@
     "typescript",
     "webpack"
   ],
-  "author": "Grant Bartlett",
+  "author": "Mike Costello",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.32",
@@ -28,6 +28,7 @@
     "@types/jest": "^24.0.25",
     "@types/react": "^16.8.1",
     "@types/react-dom": "^16.0.11",
+    "@types/react-transition-group": "4.4.0",
     "awesome-typescript-loader": "^5.2.1",
     "css-loader": "5.0.1",
     "html-webpack-plugin": "^3.2.0",

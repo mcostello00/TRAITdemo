@@ -31,6 +31,15 @@ interface IMainState {
   isUpdateError: boolean;
 }
 
+export function isValidEmail(email: string) {
+  return (
+    email === '' ||
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+      email,
+    )
+  );
+}
+
 export class Main extends React.Component<IMainProps, IMainState> {
   state = {
     response: { contacts: [] } as IContactInfo,
@@ -39,7 +48,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
     lastName: '',
     email: '',
     emails: [] as string[],
-    isLoading: false,
+    isLoading: true,
     isAdding: false,
     isEditing: false,
     isRetrievalError: false,
@@ -89,10 +98,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
     });
   };
 
-  private isValidEmail(email: string) {
-    return email === '' || true;
-  }
-
   private consolidateEmails(): string[] {
     let { emails, email } = this.state;
 
@@ -114,8 +119,8 @@ export class Main extends React.Component<IMainProps, IMainState> {
       isEditing,
     } = this.state;
 
-    if (firstName && lastName && this.isValidEmail(email)) {
-      this.setState({ isLoading: true });
+    if (firstName && lastName && isValidEmail(email)) {
+      this.setState({ isLoading: true, isUpdateError: false });
 
       let contact: IContact = {
         firstName,
@@ -148,7 +153,7 @@ export class Main extends React.Component<IMainProps, IMainState> {
   };
 
   public handleDeleteClick = (id: number) => {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, isUpdateError: false });
 
     deleteContact(id)
       .then(() => {
@@ -179,13 +184,8 @@ export class Main extends React.Component<IMainProps, IMainState> {
     }
   };
 
-  // public handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log('handleEmailChange');
-  //   this.setState({ email: event.target.value });
-  // };
-
   private async retreiveContactInfo() {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, isRetrievalError: false });
 
     getContactInfo()
       .then((response) => this.setState({ response }))
@@ -201,13 +201,40 @@ export class Main extends React.Component<IMainProps, IMainState> {
 
   public render(): JSX.Element {
     let { contacts } = this.state.response;
-    let { id, firstName, lastName, emails, email } = this.state;
+    let {
+      id,
+      firstName,
+      lastName,
+      emails,
+      email,
+      isUpdateError,
+      isRetrievalError,
+    } = this.state;
 
+    if (isUpdateError || isRetrievalError) {
+      let errorType = isUpdateError ? 'updating' : 'retreiving';
+      let message = `Error ${errorType}, please try again.`;
+
+      return (
+        <Container>
+          <Row>
+            <Col className="d-flex justify-content-center">
+              <Alert variant={'danger'} className="mt-2">
+                <span>
+                  <h5>{message}</h5>
+                </span>
+                <a href="/">Click to retry</a>
+              </Alert>
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
     return (
       <Container>
         {this.state.isLoading ? (
           <Row>
-            <Col>
+            <Col className="d-flex justify-content-center">
               <Alert variant={'info'}>
                 <Spinner
                   as="span"
@@ -242,7 +269,6 @@ export class Main extends React.Component<IMainProps, IMainState> {
                   handleChange={this.handleChange}
                   handleSubmit={this.handleSubmit}
                   handleDeleteEmailClick={this.handleDeleteEmailClick}
-                  //handleSaveClick={this.handleSaveClick}
                   handleCancelClick={this.handleCancelClick}
                   handleDeleteClick={this.handleDeleteClick}
                 />
