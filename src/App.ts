@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/contacts.css';
+import './styles/site.scss';
 
 import { Main } from './Main';
 import ReactDOM from 'react-dom';
